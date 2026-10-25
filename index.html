@@ -3,77 +3,287 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Eesa's Superpower Generator</title>
+  <title>Eesa Byte: Power Battle</title>
   <link rel="stylesheet" href="style.css">
   <script src="script.js" defer></script>
 </head>
 <body>
-  <main class="generator">
-    <header class="hero-header">
-      <h1>
-        <span>EESA'S</span>
-        <span>SUPERPOWER GENERATOR</span>
-      </h1>
-      <p>Every hero has a power.<br>Let's discover yours.</p>
+  <main class="game-shell">
+    <header class="game-header">
+      <p class="brand">EESA BYTE</p>
+      <h1>POWER BATTLE</h1>
+      <p class="tagline">
+        <span>RANDOM POWERS.</span>
+        <span>ONE ARENA.</span>
+        <span>LAST HERO STANDING.</span>
+      </p>
     </header>
 
-    <form id="name-form" class="name-form">
-      <label for="name">WHAT'S YOUR NAME?</label>
-      <input
-        type="text"
-        id="name"
-        placeholder="Enter your name"
-        maxlength="30"
-        autocomplete="off"
-      >
-      <button id="discover-button" class="button button-primary" type="submit">
-        DISCOVER MY POWER
-      </button>
-      <p id="form-message" class="form-message" role="alert"></p>
-    </form>
-
-    <section id="result" class="result" aria-labelledby="power-name" hidden>
-      <div id="scanning" class="scanning" role="status">
-        <p>SCANNING...</p>
-        <strong id="scanning-power">SEARCHING FOR POWERS</strong>
+    <section id="setup-screen" class="setup-screen" aria-labelledby="setup-title">
+      <div class="section-heading">
+        <h2 id="setup-title">CHOOSE YOUR FIGHTERS</h2>
+        <p>2–6 local players</p>
       </div>
 
-      <div id="power-card" class="power-card" hidden>
-        <p id="hero-name" class="hero-name"></p>
+      <form id="player-form" novalidate>
+        <div id="player-list" class="player-list">
+          <div class="player-slot">
+            <label for="player-1">PLAYER 1</label>
+            <div class="input-row">
+              <input
+                type="text"
+                id="player-1"
+                class="player-name"
+                placeholder="Enter name"
+                maxlength="15"
+                autocomplete="off"
+                aria-describedby="player-1-error"
+              >
+            </div>
+            <p id="player-1-error" class="player-error"></p>
+          </div>
+
+          <div class="player-slot">
+            <label for="player-2">PLAYER 2</label>
+            <div class="input-row">
+              <input
+                type="text"
+                id="player-2"
+                class="player-name"
+                placeholder="Enter name"
+                maxlength="15"
+                autocomplete="off"
+                aria-describedby="player-2-error"
+              >
+            </div>
+            <p id="player-2-error" class="player-error"></p>
+          </div>
+        </div>
+
+        <button id="add-player-button" class="button add-button" type="button">
+          + ADD PLAYER
+        </button>
+
+        <p id="form-error" class="form-error" role="alert"></p>
+
+        <button class="button start-button" type="submit">
+          START BATTLE
+        </button>
+      </form>
+    </section>
+
+    <section id="assigning-screen" class="assigning-screen" aria-labelledby="assigning-title" tabindex="-1" hidden>
+      <p class="status-label">POWER CORE ONLINE</p>
+      <div class="assigning-symbol" aria-hidden="true">⚡</div>
+      <h2 id="assigning-title">ASSIGNING POWERS...</h2>
+      <p>Scanning the power vault.</p>
+    </section>
+
+    <section id="reveal-screen" class="reveal-screen" aria-labelledby="power-name" tabindex="-1" hidden>
+      <p id="fighter-count" class="fighter-count"></p>
+
+      <article id="power-card" class="power-reveal-card">
+        <p id="fighter-name" class="fighter-name"></p>
         <p class="reveal-label">YOUR POWER IS...</p>
         <h2 id="power-name"></h2>
         <p id="power-description" class="power-description"></p>
 
-        <div class="power-level">
-          <p>
-            <span>POWER LEVEL</span>
-            <strong id="power-level-text"></strong>
-          </p>
-          <div
-            id="power-bar"
-            class="power-bar"
-            role="progressbar"
-            aria-label="Power level"
-            aria-valuemin="0"
-            aria-valuemax="100"
-          >
-            <span id="power-bar-fill"></span>
+        <div class="special-move">
+          <span>SPECIAL MOVE</span>
+          <strong id="special-move"></strong>
+        </div>
+
+        <div class="power-stats">
+          <div class="stat">
+            <p><span>ATTACK</span><strong id="attack-value"></strong></p>
+            <div id="attack-bar" class="stat-bar" role="progressbar" aria-label="Attack" aria-valuemin="0" aria-valuemax="100">
+              <span id="attack-fill"></span>
+            </div>
+          </div>
+
+          <div class="stat">
+            <p><span>DEFENSE</span><strong id="defense-value"></strong></p>
+            <div id="defense-bar" class="stat-bar" role="progressbar" aria-label="Defense" aria-valuemin="0" aria-valuemax="100">
+              <span id="defense-fill"></span>
+            </div>
+          </div>
+
+          <div class="stat">
+            <p><span>LUCK</span><strong id="luck-value"></strong></p>
+            <div id="luck-bar" class="stat-bar" role="progressbar" aria-label="Luck" aria-valuemin="0" aria-valuemax="100">
+              <span id="luck-fill"></span>
+            </div>
           </div>
         </div>
 
-        <div class="power-details">
+        <div class="power-info">
           <p><span>RARITY</span><strong id="power-rarity"></strong></p>
           <p><span>WEAKNESS</span><strong id="power-weakness"></strong></p>
         </div>
 
-        <div class="result-buttons">
-          <button id="try-again-button" class="button button-primary" type="button">
-            TRY AGAIN
-          </button>
-          <button id="change-name-button" class="button button-secondary" type="button">
-            CHANGE NAME
-          </button>
+        <button id="next-fighter-button" class="button start-button reveal-button" type="button">
+          NEXT FIGHTER
+        </button>
+      </article>
+
+      <p id="reveal-announcement" class="visually-hidden" aria-live="polite"></p>
+    </section>
+
+    <section id="arena-screen" class="arena-screen" aria-label="Battle arena" tabindex="-1" hidden>
+      <div id="final-intro-view" class="final-intro-view" tabindex="-1" hidden>
+        <p class="final-label">FINAL BATTLE</p>
+        <h2 id="final-intro-title">ONLY TWO REMAIN</h2>
+
+        <div class="final-intro-fighters">
+          <article id="final-left-card" class="final-intro-fighter">
+            <p class="final-fighter-side">LEFT FIGHTER</p>
+            <h3 id="final-left-name"></h3>
+            <p id="final-left-power" class="final-intro-power"></p>
+            <p id="final-left-health" class="final-intro-health"></p>
+          </article>
+
+          <p class="final-intro-versus" aria-label="versus">VS</p>
+
+          <article id="final-right-card" class="final-intro-fighter">
+            <p class="final-fighter-side">RIGHT FIGHTER</p>
+            <h3 id="final-right-name"></h3>
+            <p id="final-right-power" class="final-intro-power"></p>
+            <p id="final-right-health" class="final-intro-health"></p>
+          </article>
         </div>
+
+        <button id="enter-final-button" class="button start-button final-enter-button" type="button">
+          ENTER FINAL BATTLE
+        </button>
+      </div>
+
+      <div id="arena-view">
+        <p id="arena-status-label" class="status-label">WELCOME TO THE ARENA</p>
+        <h2 id="arena-title">POWER BATTLE</h2>
+        <p id="fighters-remaining" class="fighters-remaining"></p>
+        <p id="winner-message" class="winner-message" role="status"></p>
+
+        <div id="arena-players" class="arena-players"></div>
+
+        <aside class="battle-history-panel arena-battle-history" aria-label="Recent battle history">
+          <div class="battle-history-header">
+            <span class="battle-history-title">BATTLE LOG</span>
+            <span class="battle-history-badge">RECENT 5</span>
+          </div>
+          <ul id="arena-battle-history" class="battle-history-list"></ul>
+        </aside>
+
+        <button id="next-battle-button" class="button start-button arena-button" type="button">
+          NEXT BATTLE
+        </button>
+      </div>
+
+      <div id="event-view" class="event-view" tabindex="-1" hidden>
+        <p class="event-warning"><span aria-hidden="true">&#9888;</span> ARENA EVENT!</p>
+
+        <article id="event-card" class="event-card">
+          <p id="event-symbol" class="event-symbol" aria-hidden="true"></p>
+          <h2 id="event-title"></h2>
+          <p id="event-description" class="event-description"></p>
+        </article>
+
+        <button id="event-continue-button" class="button start-button event-button" type="button">
+          CONTINUE
+        </button>
+      </div>
+
+      <div id="matchup-view" class="matchup-view" tabindex="-1" hidden>
+        <p class="status-label"><span aria-hidden="true">&#9876;</span> BATTLE</p>
+        <h2 class="matchup-title">FIGHTERS SELECTED</h2>
+
+        <div id="battle-impact-banner" class="battle-impact-banner" aria-live="assertive" hidden></div>
+
+        <div class="matchup-fighters">
+          <article id="attacker-card" class="matchup-fighter">
+            <p class="matchup-role">ATTACKER</p>
+            <h3 id="attacker-name"></h3>
+            <p id="attacker-power" class="matchup-power"></p>
+            <p id="attacker-health" class="matchup-health"></p>
+            <div id="attacker-health-bar" class="matchup-health-bar" role="progressbar" aria-label="Attacker health" aria-valuemin="0" aria-valuemax="100">
+              <span id="attacker-health-fill"></span>
+            </div>
+          </article>
+
+          <p class="versus" aria-label="versus">VS</p>
+
+          <article id="defender-card" class="matchup-fighter">
+            <p class="matchup-role">DEFENDER</p>
+            <h3 id="defender-name"></h3>
+            <p id="defender-power" class="matchup-power"></p>
+            <p id="defender-health" class="matchup-health"></p>
+            <div id="defender-health-bar" class="matchup-health-bar" role="progressbar" aria-label="Defender health" aria-valuemin="0" aria-valuemax="100">
+              <span id="defender-health-fill"></span>
+            </div>
+          </article>
+        </div>
+
+        <button id="fight-button" class="button start-button fight-button" type="button">
+          FIGHT!
+        </button>
+
+        <div id="battle-result" class="battle-result" role="status" aria-live="polite" hidden>
+          <p id="battle-action"></p>
+          <div id="ability-results" class="ability-results"></div>
+          <h3 id="battle-event"></h3>
+          <p id="battle-message"></p>
+          <p id="battle-health" class="battle-health"></p>
+          <p id="elimination-message" class="elimination-message"></p>
+        </div>
+
+        <button id="continue-button" class="button start-button continue-button" type="button" hidden>
+          CONTINUE
+        </button>
+
+        <aside class="battle-history-panel" aria-label="Recent battle history">
+          <div class="battle-history-header">
+            <span class="battle-history-title">BATTLE LOG</span>
+            <span class="battle-history-badge">RECENT 5</span>
+          </div>
+          <ul id="matchup-battle-history" class="battle-history-list"></ul>
+        </aside>
+      </div>
+    </section>
+
+    <section id="winner-screen" class="winner-screen" aria-labelledby="winner-name" tabindex="-1" hidden>
+      <div class="confetti" aria-hidden="true">
+        <span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span>
+      </div>
+
+      <p class="winner-kicker">BATTLE OVER</p>
+      <p class="winner-trophy" aria-hidden="true">&#127942;</p>
+      <h2 id="winner-name"></h2>
+      <p class="winner-subtitle">LAST HERO STANDING</p>
+
+      <div class="winner-details">
+        <div class="winner-power">
+          <p><span>POWER</span><strong id="winner-power"></strong></p>
+          <p><span>RARITY</span><strong id="winner-rarity"></strong></p>
+        </div>
+
+        <div class="winner-stats">
+          <p><span>HEALTH REMAINING</span><strong id="winner-health"></strong></p>
+          <p><span>ELIMINATIONS</span><strong id="winner-eliminations"></strong></p>
+          <p><span>TOTAL DAMAGE</span><strong id="winner-damage"></strong></p>
+          <p><span>BIGGEST HIT</span><strong id="winner-biggest-hit"></strong></p>
+        </div>
+      </div>
+
+      <p id="mvp-summary" class="mvp-summary"></p>
+
+      <div class="final-results">
+        <h3>FINAL RESULTS</h3>
+        <ol id="final-ranking"></ol>
+      </div>
+
+      <div class="winner-actions">
+        <button id="rematch-button" class="button start-button" type="button">REMATCH</button>
+        <button id="new-players-button" class="button new-players-button" type="button">NEW PLAYERS</button>
       </div>
     </section>
   </main>
