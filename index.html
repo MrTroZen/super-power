@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eesa's Superpower Generator</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <main class="generator">
+    <header class="hero-header">
+      <h1>
+        <span>EESA'S</span>
+        <span>SUPERPOWER GENERATOR</span>
+      </h1>
+      <p>Every hero has a power.<br>Let's discover yours.</p>
+    </header>
+
+    <form id="name-form" class="name-form">
+      <label for="name">WHAT'S YOUR NAME?</label>
+      <input
+        type="text"
+        id="name"
+        placeholder="Enter your name"
+        maxlength="30"
+        autocomplete="off"
+      >
+      <button id="discover-button" class="button button-primary" type="submit">
+        DISCOVER MY POWER
+      </button>
+      <p id="form-message" class="form-message" role="alert"></p>
+    </form>
+
+    <section id="result" class="result" aria-labelledby="power-name" hidden>
+      <div id="scanning" class="scanning" role="status">
+        <p>SCANNING...</p>
+        <strong id="scanning-power">SEARCHING FOR POWERS</strong>
+      </div>
+
+      <div id="power-card" class="power-card" hidden>
+        <p id="hero-name" class="hero-name"></p>
+        <p class="reveal-label">YOUR POWER IS...</p>
+        <h2 id="power-name"></h2>
+        <p id="power-description" class="power-description"></p>
+
+        <div class="power-level">
+          <p>
+            <span>POWER LEVEL</span>
+            <strong id="power-level-text"></strong>
+          </p>
+          <div
+            id="power-bar"
+            class="power-bar"
+            role="progressbar"
+            aria-label="Power level"
+            aria-valuemin="0"
+            aria-valuemax="100"
+          >
+            <span id="power-bar-fill"></span>
+          </div>
+        </div>
+
+        <div class="power-details">
+          <p><span>RARITY</span><strong id="power-rarity"></strong></p>
+          <p><span>WEAKNESS</span><strong id="power-weakness"></strong></p>
+        </div>
+
+        <div class="result-buttons">
+          <button id="try-again-button" class="button button-primary" type="button">
+            TRY AGAIN
+          </button>
+          <button id="change-name-button" class="button button-secondary" type="button">
+            CHANGE NAME
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
